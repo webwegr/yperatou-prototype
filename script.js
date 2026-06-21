@@ -1,4 +1,4 @@
-const APP_VERSION = "0.6-alpha";
+const APP_VERSION = "0.6a2";
 
 const CARS = [
   { name: "Ferrari F40", country: "Italy", rarity: "Legendary", speed: 324, hp: 478, accel: 4.1, value: 2500000, image: "assets/cars/car_01.jpg" },
@@ -60,7 +60,8 @@ let S = {
 
   timeLeft: null,
   timerId: null,
-  timeExpired: false
+  timeExpired: false,
+  debugOpen: false
 };
 
 const app = document.getElementById("app");
@@ -293,7 +294,11 @@ function debugDeckOrder() {
     .join("");
 
   return `
-    <details class="mb-4 rounded-2xl border border-slate-700 bg-slate-900/80 p-4">
+    <details
+      ${S.debugOpen ? "open" : ""}
+      ontoggle="S.debugOpen = this.open"
+      class="mb-4 rounded-2xl border border-slate-700 bg-slate-900/80 p-4"
+    >
       <summary class="cursor-pointer text-sm font-black text-amber-400">
         Debug: Card order
       </summary>
@@ -478,7 +483,11 @@ function game() {
       : S.player1Name;
 
   app.innerHTML = h() + `
-    <section class="mb-4 rounded-3xl border border-emerald-400/30 bg-emerald-500/10 p-4">
+    <section class="mb-4 rounded-3xl ${
+      S.currentTurn === "player1"
+        ? "border border-emerald-400/30 bg-emerald-500/10"
+        : "border border-rose-400/30 bg-rose-500/10"
+    } p-4">
       <p class="text-sm text-slate-300">${activeName}'s turn</p>
       <h2 class="mt-1 text-2xl font-black">Διάλεξε attribute</h2>
     </section>
