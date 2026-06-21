@@ -1,38 +1,43 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Υπερατού</title>
-
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f172a" />
+    <title>Performance Legends</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <main class="app">
+        <header class="app-header">
+            <p class="eyebrow">Υπερατού Prototype</p>
+            <h1>Performance Legends</h1>
+            <p class="subtitle">Δοκίμασε τις κάρτες μία-μία στο iPhone.</p>
+        </header>
 
-    <div class="container">
-
-        <h1>ΥΠΕΡΑΤΟΥ</h1>
-
-        <div class="card">
-
-            <div class="card-image">
-                <img id="cardImage" src="" alt="">
+        <section class="card" aria-live="polite">
+            <div class="card-topline">
+                <span id="cardCategory" class="badge"></span>
+                <span id="cardCounter" class="counter"></span>
             </div>
 
-            <h2 id="cardName"></h2>
-            <p id="cardCategory"></p>
+            <div class="card-image">
+                <img id="cardImage" src="" alt="" />
+            </div>
 
-            <div class="stats" id="statsContainer"></div>
+            <div class="card-content">
+                <h2 id="cardName"></h2>
+                <p id="cardDescription" class="description"></p>
+                <div id="statsContainer" class="stats"></div>
+            </div>
+        </section>
 
+        <div class="actions">
+            <button id="prevCardBtn" type="button" class="secondary">Προηγούμενη</button>
+            <button id="nextCardBtn" type="button">Επόμενη</button>
         </div>
-
-        <button id="nextCardBtn">
-            Επόμενη Κάρτα
-        </button>
-
-    </div>
+    </main>
 
     <script src="script.js"></script>
-
 </body>
 </html>

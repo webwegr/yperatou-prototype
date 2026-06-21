@@ -1,0 +1,62 @@
+[
+    {
+        "name": "The Closer",
+        "category": "Execution",
+        "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=80",
+        "description": "Παίκτης που τελειώνει κρίσιμες υποθέσεις, παίρνει ownership και φέρνει αποτέλεσμα όταν η πίεση ανεβαίνει.",
+        "stats": {
+            "Execution": 96,
+            "Focus": 88,
+            "Speed": 82,
+            "Impact": 94
+        }
+    },
+    {
+        "name": "The Strategist",
+        "category": "Leadership",
+        "image": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80",
+        "description": "Βλέπει το μεγάλο κάδρο, συνδέει ομάδες και μετατρέπει σύνθετα προβλήματα σε καθαρό πλάνο δράσης.",
+        "stats": {
+            "Strategy": 97,
+            "Clarity": 91,
+            "Influence": 86,
+            "Impact": 90
+        }
+    },
+    {
+        "name": "The Solver",
+        "category": "Problem Solving",
+        "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
+        "description": "Μπαίνει σε ασαφή ζητήματα, βρίσκει root cause και δίνει λύσεις που αντέχουν στην πράξη.",
+        "stats": {
+            "Analysis": 95,
+            "Creativity": 84,
+            "Persistence": 89,
+            "Impact": 87
+        }
+    },
+    {
+        "name": "The Energizer",
+        "category": "Team Power",
+        "image": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80",
+        "description": "Ανεβάζει ρυθμό, κλίμα και δέσμευση στην ομάδα. Κάνει τους άλλους να κινηθούν πιο γρήγορα.",
+        "stats": {
+            "Energy": 98,
+            "Influence": 90,
+            "Collaboration": 92,
+            "Impact": 84
+        }
+    },
+    {
+        "name": "The Quality Guardian",
+        "category": "Excellence",
+        "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+        "description": "Προστατεύει το αποτέλεσμα από πρόχειρες λύσεις. Βλέπει λεπτομέρειες που οι άλλοι χάνουν.",
+        "stats": {
+            "Quality": 98,
+            "Discipline": 93,
+            "Reliability": 95,
+            "Speed": 72
+        }
+    }
+]
