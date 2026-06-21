@@ -94,27 +94,25 @@ function start(type) {
 
 function h() {
   return `
-    <header class="mb-5">
-      <div class="flex items-start justify-between">
+    <header class="mb-3">
+      <div class="flex items-center justify-between">
+
         <div>
-          <p class="text-xs font-black uppercase tracking-[.35em] text-amber-400">
+          <p class="text-[10px] font-black uppercase tracking-[.25em] text-amber-400">
             Yperatou
           </p>
 
-          <h1 class="text-3xl font-black">
+          <h1 class="text-xl font-black leading-none">
             Performance Legends
           </h1>
-
-          <p class="mt-1 text-sm text-slate-400">
-            Playable HTML demo · Player vs Bot
-          </p>
         </div>
 
-        <div class="rounded-xl border border-slate-700 bg-slate-900 px-3 py-2">
-          <span class="text-xs font-bold text-amber-400">
+        <div class="rounded-lg border border-slate-700 bg-slate-900 px-2 py-1">
+          <span class="text-[10px] font-bold text-amber-400">
             v${APP_VERSION}
           </span>
         </div>
+
       </div>
     </header>
   `;
@@ -156,23 +154,6 @@ function card(c, active = true) {
             </button>
           `).join("")}
         </div>
-      </div>
-    </div>
-  `;
-}
-
-function hiddenBotCard() {
-  return `
-    <div class="card-shadow overflow-hidden rounded-[2rem] border border-slate-700 bg-slate-900">
-      <div class="flex h-56 items-center justify-center bg-gradient-to-br from-slate-800 to-slate-950">
-        <div class="text-center">
-          <div class="mx-auto mb-4 h-24 w-36 rounded-2xl border border-slate-600 bg-slate-800"></div>
-          <p class="text-sm font-black uppercase tracking-[0.25em] text-slate-400">Bot Card</p>
-        </div>
-      </div>
-      <div class="p-5">
-        <h2 class="text-2xl font-black">Hidden</h2>
-        <p class="mt-2 text-sm text-slate-400">Το bot θα επιλέξει τυχαίο attribute.</p>
       </div>
     </div>
   `;
@@ -248,15 +229,15 @@ function game() {
         <p class="mt-1 text-sm text-slate-400">Η επιλογή γίνεται τυχαία για το MVP.</p>
       </section>
 
-      ${hiddenBotCard()}
-
-      <button
-        onclick="botPickRandomAttribute()"
-        class="mt-5 w-full rounded-2xl bg-rose-500 px-4 py-4 font-black text-white"
-      >
-        Bot selects attribute
-      </button>
-
+      <div class="mb-8">
+        <button
+          onclick="botPickRandomAttribute()"
+          class="w-full rounded-2xl bg-rose-500 px-4 py-4 font-black text-white"
+        >
+          Bot selects attribute
+        </button>
+      </div>
+      
       <button
         onclick="S.screen='home';render()"
         class="mt-3 w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm font-bold text-slate-300"
@@ -355,9 +336,13 @@ function result() {
       </p>
     </section>
     
-    <button onclick="cont()" class="mt-5 w-full rounded-2xl bg-amber-500 px-4 py-4 font-black text-slate-950">
-      Continue
-    </button>
+    <div class="mb-8">
+      <button onclick="cont()" class="w-full rounded-2xl bg-amber-500 px-4 py-4 font-black text-slate-950">
+        Continue
+      </button>
+    </div>
+
+  <div class="grid gap-4">
 
     <div class="grid gap-4">
       <div>
@@ -392,7 +377,7 @@ function over() {
           <p class="text-3xl font-black">${S.b.length}</p>
         </div>
       </div>
-
+      
       <button onclick="start(S.matchType)" class="mt-6 w-full rounded-2xl bg-amber-500 px-4 py-4 font-black text-slate-950">
         Play Again
       </button>
