@@ -1,4 +1,47 @@
-const APP_VERSION = "0.6a2";
+const APP_VERSION = "0.6a3";
+const APP_CHANGELOG = [
+  {
+  version: "0.6a3",
+  changes: [
+    "Restored Yperatou label above the Performance Legends title.",
+    "Added version changelog panel on the Home screen.",
+    "Latest version changes now appear first."
+  ]
+  },
+  {
+    version: "0.6a2",
+    changes: [
+      "Debug card order panel now stays open during Time Attack countdown.",
+      "Player 2 / Bot turn panel now uses opponent red styling.",
+      "Restored version tracking for testing."
+    ]
+  },
+  {
+    version: "0.6a",
+    changes: [
+      "Added Time Attack mode with 3 minute countdown.",
+      "Timer appears in the header and turns red in the final 30 seconds.",
+      "Time Attack uses full deck shuffling.",
+      "Quick Match changed to 7 vs 7 cards."
+    ]
+  },
+  {
+    version: "0.4",
+    changes: [
+      "Added Human vs Human mode.",
+      "Added handoff screen between players.",
+      "Added player names in setup and game UI."
+    ]
+  },
+  {
+    version: "0.3",
+    changes: [
+      "Bot keeps the turn after winning a round.",
+      "Result screen appears after bot attribute selection.",
+      "Winner takes cards in deterministic order."
+    ]
+  }
+];
 
 const CARS = [
   { name: "Ferrari F40", country: "Italy", rarity: "Legendary", speed: 324, hp: 478, accel: 4.1, value: 2500000, image: "assets/cars/car_01.jpg" },
@@ -169,6 +212,10 @@ function h() {
       <div class="mb-3 flex items-center justify-between gap-3">
 
         <div>
+          <p class="text-[10px] font-black uppercase tracking-[.25em] text-amber-400">
+            Yperatou
+          </p>
+
           <h1 class="text-xl font-black leading-none">
             Performance Legends
           </h1>
@@ -328,6 +375,30 @@ function debugDeckOrder() {
   `;
 }
 
+function changelogPanel() {
+  return `
+    <section class="mt-5 rounded-[2rem] border border-slate-800 bg-slate-900/60 p-5">
+      <h3 class="font-black">Version Changes</h3>
+
+      <div class="mt-4 grid gap-4">
+        ${APP_CHANGELOG.map(item => `
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
+            <p class="mb-2 text-sm font-black text-amber-400">
+              v${item.version}
+            </p>
+
+            <ul class="list-disc space-y-1 pl-5 text-sm text-slate-400">
+              ${item.changes.map(change => `
+                <li>${change}</li>
+              `).join("")}
+            </ul>
+          </div>
+        `).join("")}
+      </div>
+    </section>
+  `;
+}
+
 function home() {
   app.innerHTML = h() + `
     <section class="rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
@@ -439,6 +510,8 @@ function home() {
         Σε ισοπαλία οι κάρτες πάνε στο pending pile και ο επόμενος νικητής τα παίρνει όλα.
       </p>
     </section>
+
+    ${changelogPanel()}
   `;
 }
 
