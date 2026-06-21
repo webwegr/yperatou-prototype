@@ -1,4 +1,4 @@
-const APP_VERSION = "0.6";
+const APP_VERSION = "0.7";
 
 const CARS = [
   { name: "Ferrari F40", country: "Italy", rarity: "Legendary", speed: 324, hp: 478, accel: 4.1, value: 2500000, image: "assets/cars/car_01.jpg" },
@@ -176,10 +176,13 @@ function card(c, active = true) {
 }
 
 function scoreBar() {
+  const leftName = S.player1Name;
+  const rightName = S.player2Name;
+
   return `
     <section class="mb-4 grid grid-cols-3 gap-2">
       <div class="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-3">
-        <p class="text-xs text-emerald-300">${S.playerName}</p>
+        <p class="text-xs text-emerald-300">${leftName}</p>
         <p class="text-2xl font-black">${S.p.length}</p>
       </div>
 
@@ -189,10 +192,60 @@ function scoreBar() {
       </div>
 
       <div class="rounded-2xl border border-rose-400/30 bg-rose-500/10 p-3 text-right">
-        <p class="text-xs text-rose-300">Bot</p>
+        <p class="text-xs text-rose-300">${rightName}</p>
         <p class="text-2xl font-black">${S.b.length}</p>
       </div>
     </section>
+  `;
+}
+
+function debugDeckOrder() {
+  const player1Cards = S.p
+    .map((card, index) => `
+      <li class="flex gap-2 border-b border-slate-800 py-1">
+        <span class="w-6 shrink-0 text-slate-500">${index + 1}.</span>
+        <span>${card.name}</span>
+      </li>
+    `)
+    .join("");
+
+  const player2Cards = S.b
+    .map((card, index) => `
+      <li class="flex gap-2 border-b border-slate-800 py-1">
+        <span class="w-6 shrink-0 text-slate-500">${index + 1}.</span>
+        <span>${card.name}</span>
+      </li>
+    `)
+    .join("");
+
+  return `
+    <details class="mb-4 rounded-2xl border border-slate-700 bg-slate-900/80 p-4">
+      <summary class="cursor-pointer text-sm font-black text-amber-400">
+        Debug: Card order
+      </summary>
+
+      <div class="mt-4 grid gap-4 text-sm">
+        <div>
+          <h3 class="mb-2 font-black text-emerald-300">
+            ${S.player1Name} (${S.p.length})
+          </h3>
+
+          <ol class="max-h-56 overflow-auto rounded-xl bg-slate-950 p-3 text-slate-300">
+            ${player1Cards}
+          </ol>
+        </div>
+
+        <div>
+          <h3 class="mb-2 font-black text-rose-300">
+            ${S.player2Name} (${S.b.length})
+          </h3>
+
+          <ol class="max-h-56 overflow-auto rounded-xl bg-slate-950 p-3 text-slate-300">
+            ${player2Cards}
+          </ol>
+        </div>
+      </div>
+    </details>
   `;
 }
 
@@ -298,13 +351,15 @@ function home() {
 }
 
 function game() {
-  if (S.currentTurn === "bot") {
+  if (S.mode === "bot" && S.currentTurn === "bot") {
     app.innerHTML = h() + `
       <section class="mb-4 rounded-3xl border border-rose-400/30 bg-rose-500/10 p-4 text-center">
         <p class="text-sm text-slate-300">Bot's turn</p>
         <h2 class="mt-1 text-2xl font-black">Το bot επιλέγει attribute</h2>
         <p class="mt-1 text-sm text-slate-400">Η επιλογή γίνεται τυχαία για το MVP.</p>
       </section>
+
+      ${debugDeckOrder()}
 
       <div class="mb-8">
         <button
@@ -314,10 +369,10 @@ function game() {
           Bot selects attribute
         </button>
       </div>
-      
+
       <button
         onclick="S.screen='home';render()"
-        class="mt-3 w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm font-bold text-slate-300"
+        class="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm font-bold text-slate-300"
       >
         Exit Match
       </button>
@@ -325,13 +380,25 @@ function game() {
     return;
   }
 
+  const activeDeck =
+    S.currentTurn === "player2"
+      ? S.b
+      : S.p;
+
+  const activeName =
+    S.currentTurn === "player2"
+      ? S.player2Name
+      : S.player1Name;
+
   app.innerHTML = h() + `
     <section class="mb-4 rounded-3xl border border-emerald-400/30 bg-emerald-500/10 p-4">
-      <p class="text-sm text-slate-300">Your turn</p>
+      <p class="text-sm text-slate-300">${activeName}'s turn</p>
       <h2 class="mt-1 text-2xl font-black">Διάλεξε attribute</h2>
     </section>
 
-    ${card(S.p[0], true)}
+    ${debugDeckOrder()}
+
+    ${card(activeDeck[0], true)}
 
     <button
       onclick="S.screen='home';render()"
@@ -343,7 +410,7 @@ function game() {
 }
 
 function pick(k) {
-  resolveRound(k, "player");
+  resolveRound(k, S.currentTurn);
 }
 
 function botPickRandomAttribute() {
@@ -376,21 +443,27 @@ function resolveRound(k, selectedBy) {
 
 function cont() {
   const r = S.round;
+
   const pc = S.p.shift();
   const bc = S.b.shift();
 
   if (r.w === "tie") {
     S.pending.push(pc, bc);
     S.log.unshift("Ισοπαλία");
-    S.currentTurn = r.selectedBy === "bot" ? "bot" : "player";
+
+    S.currentTurn = r.selectedBy === "bot" ? "bot" : r.selectedBy;
+
   } else if (r.w === "p") {
-    S.p.push(...shuffle([pc, bc, ...S.pending]));
+    S.p.push(pc, bc, ...S.pending);
     S.pending = [];
-    S.currentTurn = "player";
+
+    S.currentTurn = "player1";
+
   } else {
-    S.b.push(...shuffle([pc, bc, ...S.pending]));
+    S.b.push(bc, pc, ...S.pending);
     S.pending = [];
-    S.currentTurn = "bot";
+
+    S.currentTurn = S.mode === "bot" ? "bot" : "player2";
   }
 
   S.round = null;
