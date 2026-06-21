@@ -1,3 +1,5 @@
+const APP_VERSION = "0.3";
+
 const CARS = [
   { name: "Ferrari F40", country: "Italy", rarity: "Legendary", speed: 324, hp: 478, accel: 4.1, value: 2500000, image: "assets/cars/car_01.jpg" },
   { name: "Porsche 911 GT3 RS", country: "Germany", rarity: "Epic", speed: 296, hp: 525, accel: 3.2, value: 350000, image: "assets/cars/car_02.jpg" },
