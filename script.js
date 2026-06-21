@@ -1,4 +1,4 @@
-const APP_VERSION = "0.5";
+const APP_VERSION = "0.6";
 
 const CARS = [
   { name: "Ferrari F40", country: "Italy", rarity: "Legendary", speed: 324, hp: 478, accel: 4.1, value: 2500000, image: "assets/cars/car_01.jpg" },
@@ -42,14 +42,21 @@ const ATTRS = [
 
 let S = {
   screen: "home",
+
+  mode: "bot", // "bot" ή "human"
   matchType: "quick",
-  playerName: "Player",
-  p: [],
-  b: [],
+
+  player1Name: "Player 1",
+  player2Name: "Bot",
+
+  p: [], // player 1 deck
+  b: [], // bot ή player 2 deck
+
   pending: [],
   round: null,
   log: [],
-  currentTurn: "player"
+
+  currentTurn: "player1"
 };
 
 const app = document.getElementById("app");
@@ -75,6 +82,11 @@ function shuffle(arr) {
 }
 
 function start(type) {
+  startMatch(S.mode, type);
+}
+
+function startMatch(mode, type) {
+  S.mode = mode;
   S.matchType = type;
 
   const n = type === "quick" ? 20 : 30;
@@ -83,10 +95,12 @@ function start(type) {
 
   S.p = deck.slice(0, n / 2);
   S.b = deck.slice(n / 2);
+
   S.pending = [];
   S.round = null;
   S.log = [];
-  S.currentTurn = "player";
+
+  S.currentTurn = "player1";
   S.screen = "game";
 
   render();
@@ -187,23 +201,84 @@ function home() {
     <section class="rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
       <h2 class="mb-4 text-xl font-black">Start Match</h2>
 
-      <label class="mb-2 block text-sm font-bold text-slate-300">Player name</label>
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-bold text-slate-300">
+          Game Mode
+        </label>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button
+            onclick="S.mode='bot'; S.player2Name='Bot'; render()"
+            class="rounded-2xl px-4 py-3 font-black ${
+              S.mode === "bot"
+                ? "bg-amber-500 text-slate-950"
+                : "border border-slate-700 bg-slate-800 text-white"
+            }"
+          >
+            Vs Bot
+          </button>
+
+          <button
+            onclick="S.mode='human'; if(S.player2Name==='Bot') S.player2Name='Player 2'; render()"
+            class="rounded-2xl px-4 py-3 font-black ${
+              S.mode === "human"
+                ? "bg-amber-500 text-slate-950"
+                : "border border-slate-700 bg-slate-800 text-white"
+            }"
+          >
+            Human vs Human
+          </button>
+        </div>
+      </div>
+
+      <label class="mb-2 block text-sm font-bold text-slate-300">
+        Player 1 Name
+      </label>
+
       <input
-        id="nm"
-        value="${S.playerName}"
+        id="p1Name"
+        value="${S.player1Name}"
         class="mb-4 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 outline-none focus:border-amber-400"
       />
 
+      ${
+        S.mode === "human"
+          ? `
+            <label class="mb-2 block text-sm font-bold text-slate-300">
+              Player 2 Name
+            </label>
+
+            <input
+              id="p2Name"
+              value="${S.player2Name}"
+              class="mb-4 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 outline-none focus:border-amber-400"
+            />
+          `
+          : ""
+      }
+
       <div class="grid gap-3">
         <button
-          onclick="S.playerName=document.getElementById('nm').value||'Player';start('quick')"
+          onclick="
+            S.player1Name=document.getElementById('p1Name').value||'Player 1';
+            S.player2Name=S.mode==='human'
+              ? (document.getElementById('p2Name').value||'Player 2')
+              : 'Bot';
+            startMatch(S.mode, 'quick');
+          "
           class="rounded-2xl bg-amber-500 px-5 py-4 font-black text-slate-950"
         >
           Quick Match · 10 vs 10
         </button>
 
         <button
-          onclick="S.playerName=document.getElementById('nm').value||'Player';start('classic')"
+          onclick="
+            S.player1Name=document.getElementById('p1Name').value||'Player 1';
+            S.player2Name=S.mode==='human'
+              ? (document.getElementById('p2Name').value||'Player 2')
+              : 'Bot';
+            startMatch(S.mode, 'classic');
+          "
           class="rounded-2xl border border-slate-700 bg-slate-800 px-5 py-4 font-black"
         >
           Classic Match · 15 vs 15
@@ -214,8 +289,8 @@ function home() {
     <section class="mt-5 rounded-[2rem] border border-slate-800 bg-slate-900/60 p-5">
       <h3 class="font-black">Rules</h3>
       <p class="mt-2 text-sm text-slate-400">
-        Διάλεξε attribute όταν είναι η σειρά σου. Αν κερδίσει το bot, παίζει το bot στον επόμενο γύρο.
-        Μεγαλύτερο κερδίζει, εκτός από το 0-100 όπου κερδίζει η μικρότερη τιμή.
+        Διάλεξε attribute όταν είναι η σειρά σου.
+        Ο νικητής του γύρου παίζει στον επόμενο γύρο.
         Σε ισοπαλία οι κάρτες πάνε στο pending pile και ο επόμενος νικητής τα παίρνει όλα.
       </p>
     </section>
