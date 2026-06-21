@@ -1,4 +1,4 @@
-const APP_VERSION = "0.4";
+const APP_VERSION = "0.5";
 
 const CARS = [
   { name: "Ferrari F40", country: "Italy", rarity: "Legendary", speed: 324, hp: 478, accel: 4.1, value: 2500000, image: "assets/cars/car_01.jpg" },
@@ -95,17 +95,12 @@ function start(type) {
 function h() {
   return `
     <header class="mb-3">
-      <div class="flex items-center justify-between">
 
-        <div>
-          <p class="text-[10px] font-black uppercase tracking-[.25em] text-amber-400">
-            Yperatou
-          </p>
+      <div class="flex items-center justify-between mb-3">
 
-          <h1 class="text-xl font-black leading-none">
-            Performance Legends
-          </h1>
-        </div>
+        <h1 class="text-xl font-black">
+          Performance Legends
+        </h1>
 
         <div class="rounded-lg border border-slate-700 bg-slate-900 px-2 py-1">
           <span class="text-[10px] font-bold text-amber-400">
@@ -114,6 +109,13 @@ function h() {
         </div>
 
       </div>
+
+      ${
+        S.screen !== "home"
+          ? scoreBar()
+          : ""
+      }
+
     </header>
   `;
 }
@@ -168,7 +170,7 @@ function scoreBar() {
       </div>
 
       <div class="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-3 text-center">
-        <p class="text-xs text-amber-300">Pending</p>
+        <p class="text-xs text-amber-300">Pile</p>
         <p class="text-2xl font-black">${S.pending.length}</p>
       </div>
 
@@ -222,7 +224,7 @@ function home() {
 
 function game() {
   if (S.currentTurn === "bot") {
-    app.innerHTML = h() + scoreBar() + `
+    app.innerHTML = h() + `
       <section class="mb-4 rounded-3xl border border-rose-400/30 bg-rose-500/10 p-4 text-center">
         <p class="text-sm text-slate-300">Bot's turn</p>
         <h2 class="mt-1 text-2xl font-black">Το bot επιλέγει attribute</h2>
@@ -248,7 +250,7 @@ function game() {
     return;
   }
 
-  app.innerHTML = h() + scoreBar() + `
+  app.innerHTML = h() + `
     <section class="mb-4 rounded-3xl border border-emerald-400/30 bg-emerald-500/10 p-4">
       <p class="text-sm text-slate-300">Your turn</p>
       <h2 class="mt-1 text-2xl font-black">Διάλεξε attribute</h2>
