@@ -95,9 +95,27 @@ function start(type) {
 function h() {
   return `
     <header class="mb-5">
-      <p class="text-xs font-black uppercase tracking-[.35em] text-amber-400">Yperatou</p>
-      <h1 class="text-3xl font-black">Performance Legends</h1>
-      <p class="mt-1 text-sm text-slate-400">Playable HTML demo · Player vs Bot</p>
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[.35em] text-amber-400">
+            Yperatou
+          </p>
+
+          <h1 class="text-3xl font-black">
+            Performance Legends
+          </h1>
+
+          <p class="mt-1 text-sm text-slate-400">
+            Playable HTML demo · Player vs Bot
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-slate-700 bg-slate-900 px-3 py-2">
+          <span class="text-xs font-bold text-amber-400">
+            v${APP_VERSION}
+          </span>
+        </div>
+      </div>
     </header>
   `;
 }
