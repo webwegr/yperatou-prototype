@@ -1,4 +1,4 @@
-const APP_VERSION = "0.4";
+const APP_VERSION = "0.6-alpha";
 
 const CARS = [
   { name: "Ferrari F40", country: "Italy", rarity: "Legendary", speed: 324, hp: 478, accel: 4.1, value: 2500000, image: "assets/cars/car_01.jpg" },
@@ -43,20 +43,24 @@ const ATTRS = [
 let S = {
   screen: "home",
 
-  mode: "bot", // "bot" ή "human"
+  mode: "bot",
   matchType: "quick",
 
   player1Name: "Player 1",
   player2Name: "Bot",
 
-  p: [], // player 1 deck
-  b: [], // bot ή player 2 deck
+  p: [],
+  b: [],
 
   pending: [],
   round: null,
   log: [],
 
-  currentTurn: "player1"
+  currentTurn: "player1",
+
+  timeLeft: null,
+  timerId: null,
+  timeExpired: false
 };
 
 const app = document.getElementById("app");
@@ -81,15 +85,60 @@ function shuffle(arr) {
   return a;
 }
 
+function formatTime(seconds) {
+  if (seconds === null) return "";
+
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+
+  return `${mins}:${String(secs).padStart(2, "0")}`;
+}
+
+function startTimer() {
+  stopTimer();
+
+  if (S.matchType !== "time") return;
+
+  S.timeLeft = 180;
+  S.timeExpired = false;
+
+  S.timerId = setInterval(() => {
+    if (S.screen === "result") return;
+
+    S.timeLeft--;
+
+    if (S.timeLeft <= 0) {
+      S.timeLeft = 0;
+      S.timeExpired = true;
+      stopTimer();
+    }
+
+    render();
+  }, 1000);
+}
+
+function stopTimer() {
+  if (S.timerId) {
+    clearInterval(S.timerId);
+    S.timerId = null;
+  }
+}
+
 function start(type) {
   startMatch(S.mode, type);
 }
 
 function startMatch(mode, type) {
+  stopTimer();
+
   S.mode = mode;
   S.matchType = type;
 
-  const n = type === "quick" ? 20 : 30;
+  const n =
+    type === "quick"
+      ? 14
+      : 30;
+
   let deck = shuffle(CARS).slice(0, n);
   deck = shuffle(deck);
 
@@ -103,23 +152,49 @@ function startMatch(mode, type) {
   S.currentTurn = "player1";
   S.screen = "game";
 
+  S.timeLeft = type === "time" ? 180 : null;
+  S.timeExpired = false;
+
   render();
+  startTimer();
 }
 
 function h() {
+  const showTimer = S.matchType === "time" && S.screen !== "home";
+  const timerIsDanger = showTimer && S.timeLeft <= 30;
+
   return `
     <header class="mb-3">
+      <div class="mb-3 flex items-center justify-between gap-3">
 
-      <div class="flex items-center justify-between mb-3">
+        <div>
+          <h1 class="text-xl font-black leading-none">
+            Performance Legends
+          </h1>
+        </div>
 
-        <h1 class="text-xl font-black">
-          Performance Legends
-        </h1>
+        <div class="flex items-center gap-2">
+          ${
+            showTimer
+              ? `
+                <div class="rounded-lg border px-2 py-1 ${
+                  timerIsDanger
+                    ? "border-red-500 bg-red-500/20 text-red-300"
+                    : "border-amber-500 bg-amber-500/10 text-amber-300"
+                }">
+                  <span class="text-xs font-black">
+                    ${formatTime(S.timeLeft)}
+                  </span>
+                </div>
+              `
+              : ""
+          }
 
-        <div class="rounded-lg border border-slate-700 bg-slate-900 px-2 py-1">
-          <span class="text-[10px] font-bold text-amber-400">
-            v${APP_VERSION}
-          </span>
+          <div class="rounded-lg border border-slate-700 bg-slate-900 px-2 py-1">
+            <span class="text-[10px] font-bold text-amber-400">
+              v${APP_VERSION}
+            </span>
+          </div>
         </div>
 
       </div>
@@ -129,7 +204,6 @@ function h() {
           ? scoreBar()
           : ""
       }
-
     </header>
   `;
 }
@@ -321,7 +395,7 @@ function home() {
           "
           class="rounded-2xl bg-amber-500 px-5 py-4 font-black text-slate-950"
         >
-          Quick Match · 10 vs 10
+          Quick Match · 7 vs 7
         </button>
 
         <button
@@ -335,6 +409,19 @@ function home() {
           class="rounded-2xl border border-slate-700 bg-slate-800 px-5 py-4 font-black"
         >
           Classic Match · 15 vs 15
+        </button>
+
+        <button
+          onclick="
+            S.player1Name=document.getElementById('p1Name').value||'Player 1';
+            S.player2Name=S.mode==='human'
+              ? (document.getElementById('p2Name').value||'Player 2')
+              : 'Bot';
+            startMatch(S.mode, 'time');
+          "
+          class="rounded-2xl border border-amber-500 bg-slate-950 px-5 py-4 font-black text-amber-400"
+        >
+          Time Attack · 3 min
         </button>
       </div>
     </section>
@@ -472,6 +559,10 @@ function cont() {
   S.currentTurn = nextTurn;
 
   if (S.p.length === 0 || S.b.length === 0) {
+    stopTimer();
+    S.screen = "over";
+  } else if (S.matchType === "time" && S.timeExpired) {
+    stopTimer();
     S.screen = "over";
   } else if (S.mode === "human" && nextTurn === "player2") {
     S.screen = "handoff";
@@ -486,34 +577,51 @@ function cont() {
 
 function result() {
   const r = S.round;
-  const txt = r.w === "tie" ? "Ισοπαλία" : r.w === "p" ? `${S.playerName} wins` : "Bot wins";
-  const selectedByText = r.selectedBy === "bot" ? "Bot selected" : `${S.playerName} selected`;
+
+  const winnerName =
+    r.w === "p"
+      ? S.player1Name
+      : r.w === "b"
+        ? S.player2Name
+        : null;
+
+  const selectedByName =
+    r.selectedBy === "player1"
+      ? S.player1Name
+      : r.selectedBy === "player2"
+        ? S.player2Name
+        : "Bot";
+
+  const txt =
+    r.w === "tie"
+      ? "Ισοπαλία"
+      : `${winnerName} wins`;
+
+  const selectedByText = `${selectedByName} selected`;
 
   app.innerHTML = h() + `
     <section class="mb-4 rounded-3xl border border-amber-400/30 bg-slate-900 p-4 text-center">
       <p class="text-sm text-slate-400">${selectedByText}: <b>${r.a.label}</b></p>
       <h2 class="mt-1 text-3xl font-black">${txt}</h2>
       <p class="mt-1 text-sm text-slate-400">
-        ${S.playerName}: ${fmt(r.pc, r.a)} · Bot: ${fmt(r.bc, r.a)}
+        ${S.player1Name}: ${fmt(r.pc, r.a)} · ${S.player2Name}: ${fmt(r.bc, r.a)}
       </p>
     </section>
-    
+
     <div class="mb-8">
       <button onclick="cont()" class="w-full rounded-2xl bg-amber-500 px-4 py-4 font-black text-slate-950">
         Continue
       </button>
     </div>
 
-  <div class="grid gap-4">
-
     <div class="grid gap-4">
       <div>
-        <p class="mb-2 text-sm font-black text-emerald-300">${S.playerName}</p>
+        <p class="mb-2 text-sm font-black text-emerald-300">${S.player1Name}</p>
         ${card(r.pc, false)}
       </div>
 
       <div>
-        <p class="mb-2 text-sm font-black text-rose-300">Bot</p>
+        <p class="mb-2 text-sm font-black text-rose-300">${S.player2Name}</p>
         ${card(r.bc, false)}
       </div>
     </div>
@@ -551,30 +659,58 @@ function handoff() {
 }
 
 function over() {
-  const win = S.p.length > S.b.length;
+  stopTimer();
+
+  const p1Cards = S.p.length;
+  const p2Cards = S.b.length;
+
+  let winnerText = "";
+
+  if (p1Cards > p2Cards) {
+    winnerText = `${S.player1Name} wins!`;
+  } else if (p2Cards > p1Cards) {
+    winnerText = `${S.player2Name} wins!`;
+  } else {
+    winnerText = "Draw!";
+  }
 
   app.innerHTML = h() + `
     <section class="rounded-[2rem] border border-slate-800 bg-slate-900 p-6 text-center">
-      <p class="text-xs uppercase tracking-[.35em] text-amber-400">Game Over</p>
-      <h2 class="mt-2 text-4xl font-black">${win ? S.playerName + " wins!" : "Bot wins!"}</h2>
+      <p class="text-xs uppercase tracking-[.35em] text-amber-400">
+        Game Over
+      </p>
+
+      <h2 class="mt-2 text-4xl font-black">
+        ${winnerText}
+      </h2>
+
+      ${
+        S.matchType === "time"
+          ? `
+            <p class="mt-3 text-sm font-bold text-slate-400">
+              Time Attack finished
+            </p>
+          `
+          : ""
+      }
 
       <div class="mt-6 grid grid-cols-2 gap-3">
         <div class="rounded-2xl bg-emerald-500/10 p-4">
-          <p class="text-sm text-emerald-300">${S.playerName}</p>
-          <p class="text-3xl font-black">${S.p.length}</p>
+          <p class="text-sm text-emerald-300">${S.player1Name}</p>
+          <p class="text-3xl font-black">${p1Cards}</p>
         </div>
 
         <div class="rounded-2xl bg-rose-500/10 p-4">
-          <p class="text-sm text-rose-300">Bot</p>
-          <p class="text-3xl font-black">${S.b.length}</p>
+          <p class="text-sm text-rose-300">${S.player2Name}</p>
+          <p class="text-3xl font-black">${p2Cards}</p>
         </div>
       </div>
-      
+
       <button onclick="start(S.matchType)" class="mt-6 w-full rounded-2xl bg-amber-500 px-4 py-4 font-black text-slate-950">
         Play Again
       </button>
 
-      <button onclick="S.screen='home';render()" class="mt-3 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-4 font-black">
+      <button onclick="stopTimer(); S.screen='home'; render()" class="mt-3 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-4 font-black">
         Home
       </button>
     </section>
