@@ -1,43 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="el">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0f172a" />
-    <title>Performance Legends</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yperatou Performance Legends Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-    <main class="app">
-        <header class="app-header">
-            <p class="eyebrow">Υπερατού Prototype</p>
-            <h1>Performance Legends</h1>
-            <p class="subtitle">Δοκίμασε τις κάρτες μία-μία στο iPhone.</p>
-        </header>
-
-        <section class="card" aria-live="polite">
-            <div class="card-topline">
-                <span id="cardCategory" class="badge"></span>
-                <span id="cardCounter" class="counter"></span>
-            </div>
-
-            <div class="card-image">
-                <img id="cardImage" src="" alt="" />
-            </div>
-
-            <div class="card-content">
-                <h2 id="cardName"></h2>
-                <p id="cardDescription" class="description"></p>
-                <div id="statsContainer" class="stats"></div>
-            </div>
-        </section>
-
-        <div class="actions">
-            <button id="prevCardBtn" type="button" class="secondary">Προηγούμενη</button>
-            <button id="nextCardBtn" type="button">Επόμενη</button>
-        </div>
-    </main>
-
-    <script src="script.js"></script>
+<body class="min-h-screen bg-slate-950 text-white">
+  <div id="app" class="mx-auto max-w-md min-h-screen px-4 py-5"></div>
+  <script src="script.js"></script>
 </body>
 </html>

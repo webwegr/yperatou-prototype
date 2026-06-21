@@ -1,22 +1,24 @@
-# Yperatou Prototype — Performance Legends
+# Yperatou - Performance Legends playable demo
 
-Mobile-first GitHub Pages prototype for the Performance Legends card set.
+Απλό static demo για GitHub Pages.
 
-## Files
+## Δομή
 
-- `index.html` — main page
-- `style.css` — mobile card design
-- `script.js` — card navigation and rendering
-- `cards.json` — editable card data
+- `index.html`
+- `style.css`
+- `script.js`
+- `assets/cars/`
 
-## GitHub Pages
+## Πώς το ανεβάζεις
 
-Upload all files to the root of the `yperatou-prototype` repository.
-Then open:
+Ανέβασε όλα τα αρχεία στο GitHub repository σου και ενεργοποίησε GitHub Pages.
 
-`https://USERNAME.github.io/yperatou-prototype/`
+## Λειτουργικότητα
 
-## Editing cards
-
-Change only `cards.json` when adding or updating cards.
-Each stat should use values from 0 to 100.
+- Player vs Bot
+- Quick Match 10 vs 10
+- Classic Match 15 vs 15
+- Επιλογή attribute
+- Bot reveal
+- Classic tie rule με pending pile
+- Game over
