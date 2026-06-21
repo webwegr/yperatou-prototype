@@ -1,4 +1,4 @@
-const APP_VERSION = "0.7";
+const APP_VERSION = "0.4";
 
 const CARS = [
   { name: "Ferrari F40", country: "Italy", rarity: "Legendary", speed: 324, hp: 478, accel: 4.1, value: 2500000, image: "assets/cars/car_01.jpg" },
@@ -447,27 +447,39 @@ function cont() {
   const pc = S.p.shift();
   const bc = S.b.shift();
 
+  let nextTurn = "player1";
+
   if (r.w === "tie") {
     S.pending.push(pc, bc);
     S.log.unshift("Ισοπαλία");
 
-    S.currentTurn = r.selectedBy === "bot" ? "bot" : r.selectedBy;
+    nextTurn = r.selectedBy;
 
   } else if (r.w === "p") {
     S.p.push(pc, bc, ...S.pending);
     S.pending = [];
 
-    S.currentTurn = "player1";
+    nextTurn = "player1";
 
   } else {
     S.b.push(bc, pc, ...S.pending);
     S.pending = [];
 
-    S.currentTurn = S.mode === "bot" ? "bot" : "player2";
+    nextTurn = S.mode === "bot" ? "bot" : "player2";
   }
 
   S.round = null;
-  S.screen = S.p.length === 0 || S.b.length === 0 ? "over" : "game";
+  S.currentTurn = nextTurn;
+
+  if (S.p.length === 0 || S.b.length === 0) {
+    S.screen = "over";
+  } else if (S.mode === "human" && nextTurn === "player2") {
+    S.screen = "handoff";
+  } else if (S.mode === "human" && nextTurn === "player1" && r.selectedBy === "player2") {
+    S.screen = "handoff";
+  } else {
+    S.screen = "game";
+  }
 
   render();
 }
@@ -508,6 +520,36 @@ function result() {
   `;
 }
 
+function handoff() {
+  const nextPlayerName =
+    S.currentTurn === "player2"
+      ? S.player2Name
+      : S.player1Name;
+
+  app.innerHTML = h() + `
+    <section class="rounded-[2rem] border border-slate-800 bg-slate-900 p-6 text-center">
+      <p class="text-xs uppercase tracking-[.35em] text-amber-400">
+        Human vs Human
+      </p>
+
+      <h2 class="mt-3 text-3xl font-black">
+        Δώσε τη συσκευή στον/στην ${nextPlayerName}
+      </h2>
+
+      <p class="mt-3 text-sm text-slate-400">
+        Η επόμενη κάρτα θα εμφανιστεί μόνο όταν πατηθεί συνέχεια.
+      </p>
+
+      <button
+        onclick="S.screen='game'; render()"
+        class="mt-6 w-full rounded-2xl bg-amber-500 px-4 py-4 font-black text-slate-950"
+      >
+        Είμαι ο/η ${nextPlayerName} - Συνέχεια
+      </button>
+    </section>
+  `;
+}
+
 function over() {
   const win = S.p.length > S.b.length;
 
@@ -543,6 +585,7 @@ function render() {
   if (S.screen === "home") home();
   if (S.screen === "game") game();
   if (S.screen === "result") result();
+  if (S.screen === "handoff") handoff();
   if (S.screen === "over") over();
 }
 
