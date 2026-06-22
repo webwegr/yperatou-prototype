@@ -1,6 +1,15 @@
-const APP_VERSION = "0.6a3";
+const APP_VERSION = "0.7a1";
 const APP_CHANGELOG = [
   {
+  version: "0.7a1",
+  changes: [
+    "Added multi-deck architecture.",
+    "Added Space Giants deck with 30 cards.",
+    "Added deck selection on Home screen.",
+    "Deck titles now change dynamically during gameplay.",
+    "Game attributes are now deck-specific instead of globally defined."
+  ]
+  },{
   version: "0.6a3",
   changes: [
     "Restored Yperatou label above the Performance Legends title.",
@@ -76,12 +85,69 @@ const CARS = [
   { name: "Audi S3", country: "Germany", rarity: "Common", speed: 250, hp: 310, accel: 4.8, value: 38000, image: "assets/cars/car_30.jpg" }
 ];
 
-const ATTRS = [
-  { key: "speed", label: "Top Speed", unit: "km/h", higherWins: true },
-  { key: "hp", label: "Horsepower", unit: "hp", higherWins: true },
-  { key: "accel", label: "0-100", unit: "sec", higherWins: false },
-  { key: "value", label: "Market Value", unit: "€", higherWins: true }
+const SPACE = [
+  { name: "Earth", country: "Solar System", rarity: "Common", diameter: 12742, gravity: 9.8, moons: 1, distance: 1.0, image: "assets/space/space_01.jpg" },
+  { name: "Mars", country: "Solar System", rarity: "Common", diameter: 6779, gravity: 3.7, moons: 2, distance: 1.5, image: "assets/space/space_02.jpg" },
+  { name: "Venus", country: "Solar System", rarity: "Common", diameter: 12104, gravity: 8.9, moons: 0, distance: 0.7, image: "assets/space/space_03.jpg" },
+  { name: "Mercury", country: "Solar System", rarity: "Common", diameter: 4879, gravity: 3.7, moons: 0, distance: 0.4, image: "assets/space/space_04.jpg" },
+  { name: "Moon", country: "Solar System", rarity: "Common", diameter: 3475, gravity: 1.6, moons: 0, distance: 0.0026, image: "assets/space/space_05.jpg" },
+  { name: "Ceres", country: "Asteroid Belt", rarity: "Common", diameter: 940, gravity: 0.27, moons: 0, distance: 2.8, image: "assets/space/space_06.jpg" },
+  { name: "Vesta", country: "Asteroid Belt", rarity: "Common", diameter: 525, gravity: 0.25, moons: 0, distance: 2.4, image: "assets/space/space_07.jpg" },
+  { name: "Pluto", country: "Kuiper Belt", rarity: "Common", diameter: 2377, gravity: 0.62, moons: 5, distance: 39.5, image: "assets/space/space_08.jpg" },
+  { name: "Eris", country: "Kuiper Belt", rarity: "Common", diameter: 2326, gravity: 0.82, moons: 1, distance: 67.7, image: "assets/space/space_09.jpg" },
+  { name: "Haumea", country: "Kuiper Belt", rarity: "Common", diameter: 1632, gravity: 0.44, moons: 2, distance: 43.2, image: "assets/space/space_10.jpg" },
+  { name: "Makemake", country: "Kuiper Belt", rarity: "Common", diameter: 1430, gravity: 0.5, moons: 1, distance: 45.8, image: "assets/space/space_11.jpg" },
+  { name: "Europa", country: "Jupiter Moon", rarity: "Common", diameter: 3122, gravity: 1.3, moons: 0, distance: 5.2, image: "assets/space/space_12.jpg" },
+  { name: "Jupiter", country: "Solar System", rarity: "Uncommon", diameter: 139820, gravity: 24.8, moons: 95, distance: 5.2, image: "assets/space/space_13.jpg" },
+  { name: "Saturn", country: "Solar System", rarity: "Uncommon", diameter: 116460, gravity: 10.4, moons: 146, distance: 9.5, image: "assets/space/space_14.jpg" },
+  { name: "Uranus", country: "Solar System", rarity: "Uncommon", diameter: 50724, gravity: 8.7, moons: 28, distance: 19.8, image: "assets/space/space_15.jpg" },
+  { name: "Neptune", country: "Solar System", rarity: "Uncommon", diameter: 49244, gravity: 11.2, moons: 16, distance: 30.1, image: "assets/space/space_16.jpg" },
+  { name: "Titan", country: "Saturn Moon", rarity: "Uncommon", diameter: 5150, gravity: 1.35, moons: 0, distance: 9.5, image: "assets/space/space_17.jpg" },
+  { name: "Ganymede", country: "Jupiter Moon", rarity: "Uncommon", diameter: 5268, gravity: 1.43, moons: 0, distance: 5.2, image: "assets/space/space_18.jpg" },
+  { name: "Callisto", country: "Jupiter Moon", rarity: "Uncommon", diameter: 4821, gravity: 1.24, moons: 0, distance: 5.2, image: "assets/space/space_19.jpg" },
+  { name: "Io", country: "Jupiter Moon", rarity: "Uncommon", diameter: 3643, gravity: 1.8, moons: 0, distance: 5.2, image: "assets/space/space_20.jpg" },
+  { name: "The Sun", country: "Star", rarity: "Rare", diameter: 1392700, gravity: 274, moons: 8, distance: 0, image: "assets/space/space_21.jpg" },
+  { name: "Sirius A", country: "Star", rarity: "Rare", diameter: 2400000, gravity: 196, moons: 0, distance: 544000, image: "assets/space/space_22.jpg" },
+  { name: "Vega", country: "Star", rarity: "Rare", diameter: 3300000, gravity: 170, moons: 0, distance: 1580000, image: "assets/space/space_23.jpg" },
+  { name: "Proxima Centauri", country: "Star", rarity: "Rare", diameter: 200000, gravity: 1620, moons: 0, distance: 268000, image: "assets/space/space_24.jpg" },
+  { name: "Betelgeuse", country: "Red Supergiant", rarity: "Epic", diameter: 1234000000, gravity: 0.002, moons: 0, distance: 41000000, image: "assets/space/space_25.jpg" },
+  { name: "Rigel", country: "Blue Supergiant", rarity: "Epic", diameter: 109000000, gravity: 7.5, moons: 0, distance: 55000000, image: "assets/space/space_26.jpg" },
+  { name: "TON 618", country: "Black Hole", rarity: "Legendary", diameter: 390000000000, gravity: 9999, moons: 0, distance: 660000000000, image: "assets/space/space_27.jpg" },
+  { name: "Andromeda Galaxy", country: "Galaxy", rarity: "Rare", diameter: 2200000000000000000, gravity: 0, moons: 0, distance: 161000000000, image: "assets/space/space_28.jpg" },
+  { name: "Milky Way", country: "Galaxy", rarity: "Epic", diameter: 946000000000000000, gravity: 0, moons: 0, distance: 0, image: "assets/space/space_29.jpg" },
+  { name: "Sombrero Galaxy", country: "Galaxy", rarity: "Rare", diameter: 474000000000000000, gravity: 0, moons: 0, distance: 1830000000000, image: "assets/space/space_30.jpg" }
 ];
+
+const DECKS = {
+  performance: {
+    id: "performance",
+    title: "Performance Legends",
+    cards: CARS,
+    attrs: [
+      { key: "speed", label: "Top Speed", unit: "km/h", higherWins: true },
+      { key: "hp", label: "Horsepower", unit: "hp", higherWins: true },
+      { key: "accel", label: "0-100", unit: "sec", higherWins: false },
+      { key: "value", label: "Market Value", unit: "€", higherWins: true }
+    ]
+  },
+  space: {
+    id: "space",
+    title: "Space Giants",
+    cards: SPACE,
+    attrs: [
+      { key: "diameter", label: "Diameter", unit: "km", higherWins: true },
+      { key: "gravity", label: "Gravity", unit: "m/s²", higherWins: true },
+      { key: "moons", label: "Moons", unit: "", higherWins: true },
+      { key: "distance", label: "Distance from Earth", unit: "AU", higherWins: true }
+    ]
+  }
+};
+
+let ACTIVE_DECK = DECKS.performance;
+
+function attrs() {
+  return ACTIVE_DECK.attrs;
+}
 
 let S = {
   screen: "home",
@@ -115,9 +181,13 @@ function money(n) {
 
 function fmt(c, a) {
   const v = c[a.key];
+
   if (a.key === "value") return money(v);
   if (a.key === "accel") return Number(v).toFixed(1) + " " + a.unit;
-  return v + " " + a.unit;
+  if (a.key === "distance") return Number(v).toLocaleString("el-GR") + " " + a.unit;
+  if (a.unit === "") return Number(v).toLocaleString("el-GR");
+
+  return Number(v).toLocaleString("el-GR") + " " + a.unit;
 }
 
 function shuffle(arr) {
@@ -183,7 +253,7 @@ function startMatch(mode, type) {
       ? 14
       : 30;
 
-  let deck = shuffle(CARS).slice(0, n);
+  let deck = shuffle(ACTIVE_DECK.cards).slice(0, n);
   deck = shuffle(deck);
 
   S.p = deck.slice(0, n / 2);
@@ -206,18 +276,25 @@ function startMatch(mode, type) {
 function h() {
   const showTimer = S.matchType === "time" && S.screen !== "home";
   const timerIsDanger = showTimer && S.timeLeft <= 30;
+  const title = S.screen === "home" ? "Yperatou" : ACTIVE_DECK.title;
 
   return `
     <header class="mb-3">
       <div class="mb-3 flex items-center justify-between gap-3">
 
         <div>
-          <p class="text-[10px] font-black uppercase tracking-[.25em] text-amber-400">
-            Yperatou
-          </p>
+          ${
+            S.screen !== "home"
+              ? `
+                <p class="text-[10px] font-black uppercase tracking-[.25em] text-amber-400">
+                  Yperatou
+                </p>
+              `
+              : ""
+          }
 
           <h1 class="text-xl font-black leading-none">
-            Performance Legends
+            ${title}
           </h1>
         </div>
 
@@ -282,7 +359,7 @@ function card(c, active = true) {
         </div>
 
         <div class="grid gap-2">
-          ${ATTRS.map(a => `
+          ${attrs().map(a => `
             <button
               ${active ? `onclick="pick('${a.key}')"` : ""}
               class="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-left ${active ? "hover:border-amber-400" : ""}"
@@ -403,6 +480,36 @@ function home() {
   app.innerHTML = h() + `
     <section class="rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
       <h2 class="mb-4 text-xl font-black">Start Match</h2>
+
+            <div class="mb-5">
+        <label class="mb-2 block text-sm font-bold text-slate-300">
+          Deck
+        </label>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button
+            onclick="ACTIVE_DECK = DECKS.performance; render()"
+            class="rounded-2xl px-4 py-3 font-black ${
+              ACTIVE_DECK.id === "performance"
+                ? "bg-amber-500 text-slate-950"
+                : "border border-slate-700 bg-slate-800 text-white"
+            }"
+          >
+            Performance Legends
+          </button>
+
+          <button
+            onclick="ACTIVE_DECK = DECKS.space; render()"
+            class="rounded-2xl px-4 py-3 font-black ${
+              ACTIVE_DECK.id === "space"
+                ? "bg-amber-500 text-slate-950"
+                : "border border-slate-700 bg-slate-800 text-white"
+            }"
+          >
+            Space Giants
+          </button>
+        </div>
+      </div>
 
       <div class="mb-5">
         <label class="mb-2 block text-sm font-bold text-slate-300">
@@ -583,12 +690,12 @@ function pick(k) {
 }
 
 function botPickRandomAttribute() {
-  const randomAttr = ATTRS[Math.floor(Math.random() * ATTRS.length)];
+  const randomAttr = attrs()[Math.floor(Math.random() * attrs().length)];
   resolveRound(randomAttr.key, "bot");
 }
 
 function resolveRound(k, selectedBy) {
-  const a = ATTRS.find(x => x.key === k);
+  const a = attrs().find(x => x.key === k);
   const pc = S.p[0];
   const bc = S.b[0];
   const pv = pc[k];
