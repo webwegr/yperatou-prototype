@@ -1,6 +1,15 @@
-const APP_VERSION = "0.7a2";
+const APP_VERSION = "0.7a3";
 const APP_CHANGELOG = [
- {
+{
+  version: "0.7a3",
+  changes: [
+    "Added European Nations deck.",
+    "Added educational country info with capital, landmark and cultural fact.",
+    "Added European Nations option to the deck selector.",
+    "Updated card rendering to support optional info text.",
+    "Updated value formatting for population and life expectancy."
+  ]
+},{
   version: "0.7a2",
   changes: [
     "Renamed Space Giants to Cosmic Legends.",
@@ -126,16 +135,49 @@ const SPACE = [
   { name: "UY Scuti", country: "Ερυθρός Υπεργίγαντας", rarity: "Legendary", diameter: 2376000000, gravity: 0.001, temperature: 3365, moons: 0, image: "assets/space/space_30.jpg" }
 ];
 
+const EUROPE = [
+  { name:"Ελλάδα", population:10.3, area:131957, lifeExpectancy:81.5, distanceFromGreece:0, info:"Πρωτεύουσα: Αθήνα. Landmark: Παρθενώνας. Η Ελλάδα θεωρείται γενέτειρα της δημοκρατίας και των Ολυμπιακών Αγώνων.", image:"assets/europe/greece.jpg" },
+  { name:"Ιταλία", population:58.9, area:301340, lifeExpectancy:83.4, distanceFromGreece:1051, info:"Πρωτεύουσα: Ρώμη. Landmark: Κολοσσαίο. Η Ιταλία υπήρξε το κέντρο της Ρωμαϊκής Αυτοκρατορίας και της Αναγέννησης.", image:"assets/europe/italy.jpg" },
+  { name:"Γαλλία", population:68.6, area:551695, lifeExpectancy:82.8, distanceFromGreece:2096, info:"Πρωτεύουσα: Παρίσι. Landmark: Πύργος Άιφελ. Η Γαλλία έχει ασκήσει μεγάλη επιρροή στην τέχνη, τη μόδα και τη γαστρονομία.", image:"assets/europe/france.jpg" },
+  { name:"Γερμανία", population:83.5, area:357022, lifeExpectancy:81.0, distanceFromGreece:1803, info:"Πρωτεύουσα: Βερολίνο. Landmark: Πύλη Βρανδεμβούργου. Η Γερμανία διαθέτει τη μεγαλύτερη οικονομία της Ευρώπης.", image:"assets/europe/germany.jpg" },
+  { name:"Ισπανία", population:48.6, area:505990, lifeExpectancy:83.2, distanceFromGreece:2370, info:"Πρωτεύουσα: Μαδρίτη. Landmark: Sagrada Familia. Η Ισπανία είναι γνωστή για τον πολιτισμό της και την ποδοσφαιρική της παράδοση.", image:"assets/europe/spain.jpg" },
+  { name:"Πορτογαλία", population:10.5, area:92212, lifeExpectancy:81.5, distanceFromGreece:2852, info:"Πρωτεύουσα: Λισαβόνα. Landmark: Πύργος Belém. Οι Πορτογάλοι εξερευνητές πρωταγωνίστησαν στην Εποχή των Ανακαλύψεων.", image:"assets/europe/portugal.jpg" },
+  { name:"Ολλανδία", population:17.9, area:41543, lifeExpectancy:81.8, distanceFromGreece:2163, info:"Πρωτεύουσα: Άμστερνταμ. Landmark: Ανεμόμυλοι Kinderdijk. Η χώρα έχει ανακτήσει σημαντικές εκτάσεις γης από τη θάλασσα.", image:"assets/europe/netherlands.jpg" },
+  { name:"Βέλγιο", population:11.7, area:30528, lifeExpectancy:81.9, distanceFromGreece:2090, info:"Πρωτεύουσα: Βρυξέλλες. Landmark: Atomium. Το Βέλγιο φιλοξενεί σημαντικούς θεσμούς της Ευρωπαϊκής Ένωσης.", image:"assets/europe/belgium.jpg" },
+  { name:"Αυστρία", population:9.1, area:83879, lifeExpectancy:82.0, distanceFromGreece:1283, info:"Πρωτεύουσα: Βιέννη. Landmark: Ανάκτορο Schönbrunn. Η Αυστρία είναι γνωστή για την κλασική μουσική και τους μεγάλους συνθέτες της.", image:"assets/europe/austria.jpg" },
+  { name:"Ελβετία", population:8.9, area:41285, lifeExpectancy:83.8, distanceFromGreece:1620, info:"Πρωτεύουσα: Βέρνη. Landmark: Matterhorn. Η Ελβετία είναι γνωστή για τις Άλπεις, την ουδετερότητα και την υψηλή ποιότητα ζωής.", image:"assets/europe/switzerland.jpg" },
+  { name:"Σουηδία", population:10.6, area:450295, lifeExpectancy:82.4, distanceFromGreece:2408, info:"Πρωτεύουσα: Στοκχόλμη. Landmark: Δημαρχείο Στοκχόλμης. Στη Σουηδία απονέμονται κάθε χρόνο τα Βραβεία Νόμπελ.", image:"assets/europe/sweden.jpg" },
+  { name:"Νορβηγία", population:5.5, area:385207, lifeExpectancy:83.0, distanceFromGreece:2605, info:"Πρωτεύουσα: Όσλο. Landmark: Geirangerfjord. Η Νορβηγία είναι γνωστή για τα φιόρδ, τη ναυτική της παράδοση και το βόρειο σέλας.", image:"assets/europe/norway.jpg" },
+  { name:"Δανία", population:5.9, area:42933, lifeExpectancy:81.6, distanceFromGreece:2135, info:"Πρωτεύουσα: Κοπεγχάγη. Landmark: Μικρή Γοργόνα. Η Δανία είναι γνωστή για το design, την ποδηλασία και την έννοια hygge.", image:"assets/europe/denmark.jpg" },
+  { name:"Φινλανδία", population:5.6, area:338455, lifeExpectancy:82.0, distanceFromGreece:2500, info:"Πρωτεύουσα: Ελσίνκι. Landmark: Καθεδρικός Ελσίνκι. Η Φινλανδία είναι γνωστή για την εκπαίδευση, τις λίμνες και τη σάουνα.", image:"assets/europe/finland.jpg" },
+  { name:"Ιρλανδία", population:5.3, area:70273, lifeExpectancy:82.3, distanceFromGreece:2860, info:"Πρωτεύουσα: Δουβλίνο. Landmark: Cliffs of Moher. Η Ιρλανδία είναι γνωστή για τη λογοτεχνία, τη μουσική και την κελτική παράδοση.", image:"assets/europe/ireland.jpg" },
+  { name:"Ηνωμένο Βασίλειο", population:67.7, area:243610, lifeExpectancy:81.0, distanceFromGreece:2400, info:"Πρωτεύουσα: Λονδίνο. Landmark: Big Ben. Το Ηνωμένο Βασίλειο επηρέασε σημαντικά την παγκόσμια ιστορία, τη γλώσσα και τη βιομηχανική επανάσταση.", image:"assets/europe/uk.jpg" },
+  { name:"Πολωνία", population:36.8, area:312696, lifeExpectancy:78.6, distanceFromGreece:1598, info:"Πρωτεύουσα: Βαρσοβία. Landmark: Κάστρο Wawel. Η Πολωνία είναι η πατρίδα της βραβευμένης με Νόμπελ Μαρίας Κιουρί.", image:"assets/europe/poland.jpg" },
+  { name:"Τσεχία", population:10.9, area:78865, lifeExpectancy:79.5, distanceFromGreece:1535, info:"Πρωτεύουσα: Πράγα. Landmark: Γέφυρα Καρόλου. Η Τσεχία είναι γνωστή για τη μεσαιωνική Πράγα και την πλούσια μουσική της παράδοση.", image:"assets/europe/czechia.jpg" },
+  { name:"Ουγγαρία", population:9.6, area:93030, lifeExpectancy:76.7, distanceFromGreece:1125, info:"Πρωτεύουσα: Βουδαπέστη. Landmark: Κοινοβούλιο Βουδαπέστης. Η Ουγγαρία είναι γνωστή για τον Δούναβη και τα θερμά λουτρά της.", image:"assets/europe/hungary.jpg" },
+  { name:"Ρουμανία", population:19.0, area:238397, lifeExpectancy:76.6, distanceFromGreece:743, info:"Πρωτεύουσα: Βουκουρέστι. Landmark: Κάστρο Bran. Η Ρουμανία είναι γνωστή για τα Καρπάθια Όρη και την περιοχή της Τρανσυλβανίας.", image:"assets/europe/romania.jpg" },
+  { name:"Βουλγαρία", population:6.4, area:110879, lifeExpectancy:75.8, distanceFromGreece:525, info:"Πρωτεύουσα: Σόφια. Landmark: Καθεδρικός Αλεξάντερ Νέφσκι. Η Βουλγαρία έχει πλούσια βαλκανική ιστορία και αρχαία θρακική κληρονομιά.", image:"assets/europe/bulgaria.jpg" },
+  { name:"Σερβία", population:6.6, area:88361, lifeExpectancy:75.5, distanceFromGreece:805, info:"Πρωτεύουσα: Βελιγράδι. Landmark: Φρούριο Βελιγραδίου. Η Σερβία βρίσκεται στο σταυροδρόμι Κεντρικής και Νοτιοανατολικής Ευρώπης.", image:"assets/europe/serbia.jpg" },
+  { name:"Κροατία", population:3.9, area:56594, lifeExpectancy:78.3, distanceFromGreece:1080, info:"Πρωτεύουσα: Ζάγκρεμπ. Landmark: Τείχη Ντουμπρόβνικ. Η Κροατία είναι γνωστή για τις δαλματικές ακτές και τις ιστορικές της πόλεις.", image:"assets/europe/croatia.jpg" },
+  { name:"Σλοβενία", population:2.1, area:20273, lifeExpectancy:81.3, distanceFromGreece:1205, info:"Πρωτεύουσα: Λιουμπλιάνα. Landmark: Λίμνη Bled. Η Σλοβενία συνδυάζει Άλπεις, δάση και ακτές σε μικρή γεωγραφική έκταση.", image:"assets/europe/slovenia.jpg" },
+  { name:"Σλοβακία", population:5.4, area:49035, lifeExpectancy:77.8, distanceFromGreece:1250, info:"Πρωτεύουσα: Μπρατισλάβα. Landmark: Κάστρο Μπρατισλάβας. Η Σλοβακία είναι γνωστή για τα Καρπάθια και τα μεσαιωνικά της κάστρα.", image:"assets/europe/slovakia.jpg" },
+  { name:"Λιθουανία", population:2.9, area:65300, lifeExpectancy:76.0, distanceFromGreece:1860, info:"Πρωτεύουσα: Βίλνιους. Landmark: Παλιά Πόλη Βίλνιους. Η Λιθουανία υπήρξε μέρος ενός από τα μεγαλύτερα μεσαιωνικά κράτη της Ευρώπης.", image:"assets/europe/lithuania.jpg" },
+  { name:"Λετονία", population:1.9, area:64589, lifeExpectancy:75.5, distanceFromGreece:2000, info:"Πρωτεύουσα: Ρίγα. Landmark: Παλιά Πόλη Ρίγας. Η Λετονία είναι γνωστή για την αρχιτεκτονική Art Nouveau και τη βαλτική της ταυτότητα.", image:"assets/europe/latvia.jpg" },
+  { name:"Εσθονία", population:1.4, area:45227, lifeExpectancy:78.8, distanceFromGreece:2200, info:"Πρωτεύουσα: Ταλίν. Landmark: Παλιά Πόλη Ταλίν. Η Εσθονία είναι γνωστή για την ψηφιακή διακυβέρνηση και τη μεσαιωνική πρωτεύουσά της.", image:"assets/europe/estonia.jpg" },
+  { name:"Ισλανδία", population:0.4, area:103000, lifeExpectancy:83.1, distanceFromGreece:4020, info:"Πρωτεύουσα: Ρέικιαβικ. Landmark: Blue Lagoon. Η Ισλανδία είναι γνωστή για ηφαίστεια, παγετώνες, θερμές πηγές και εντυπωσιακά φυσικά τοπία.", image:"assets/europe/iceland.jpg" },
+  { name:"Μάλτα", population:0.5, area:316, lifeExpectancy:83.0, distanceFromGreece:870, info:"Πρωτεύουσα: Βαλέτα. Landmark: Καθεδρικός Αγίου Ιωάννη. Η Μάλτα έχει στρατηγική θέση στη Μεσόγειο και πλούσια ιπποτική ιστορία.", image:"assets/europe/malta.jpg" }
+];
+
 const DECKS = {
   performance: {
     id: "performance",
     title: "Performance Legends",
     cards: CARS,
     attrs: [
-      { key: "speed", label: "Top Speed", unit: "km/h", higherWins: true },
-      { key: "hp", label: "Horsepower", unit: "hp", higherWins: true },
+      { key: "speed", label: "Μέγιστη ταχύτητα", unit: "km/h", higherWins: true },
+      { key: "hp", label: "Ιπποδύναμη", unit: "hp", higherWins: true },
       { key: "accel", label: "0-100", unit: "sec", higherWins: false },
-      { key: "value", label: "Market Value", unit: "€", higherWins: true }
+      { key: "value", label: "Αξία", unit: "€", higherWins: true }
     ]
   },
   space: {
@@ -148,7 +190,18 @@ const DECKS = {
       { key: "temperature", label: "Θερμοκρασία", unit: "°C", higherWins: true },
       { key: "moons", label: "Δορυφόροι", unit: "", higherWins: true }
     ]
-  }
+  },
+  europe: {
+   id: "europe",
+   title: "European Nations",
+   cards: EUROPE,
+   attrs: [
+     { key: "population", label: "Πληθυσμός", unit: "εκ.", higherWins: true },
+     { key: "area", label: "Έκταση", unit: "km²", higherWins: true },
+     { key: "lifeExpectancy", label: "Προσδόκιμο ζωής", unit: "έτη", higherWins: true },
+     { key: "distanceFromGreece", label: "Απόσταση από Αθήνα", unit: "km", higherWins: true }
+   ]
+ }
 };
 
 let ACTIVE_DECK = DECKS.performance;
@@ -192,20 +245,28 @@ function fmt(c, a) {
 
   if (a.key === "value") return money(v);
   if (a.key === "accel") return Number(v).toFixed(1) + " " + a.unit;
-  if (a.key === "gravity") return Number(v).toLocaleString("el-GR") + " " + a.unit;
-  if (a.key === "temperature") return Number(v).toLocaleString("el-GR") + " " + a.unit;
-  if (a.unit === "") return Number(v).toLocaleString("el-GR");
+
+  if (a.key === "population") {
+    return Number(v).toLocaleString("el-GR") + " " + a.unit;
+  }
+
+  if (a.key === "lifeExpectancy") {
+    return Number(v).toFixed(1).replace(".", ",") + " " + a.unit;
+  }
+
+  if (a.key === "gravity") {
+    return Number(v).toLocaleString("el-GR") + " " + a.unit;
+  }
+
+  if (a.key === "temperature") {
+    return Number(v).toLocaleString("el-GR") + " " + a.unit;
+  }
+
+  if (a.unit === "") {
+    return Number(v).toLocaleString("el-GR");
+  }
 
   return Number(v).toLocaleString("el-GR") + " " + a.unit;
-}
-
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
 }
 
 function formatTime(seconds) {
@@ -358,14 +419,37 @@ function card(c, active = true) {
   return `
     <div class="card-shadow overflow-hidden rounded-[2rem] border border-amber-400/40 bg-slate-900">
       <img src="${c.image}" alt="${c.name}" class="h-56 w-full object-cover" />
+
       <div class="p-5">
         <div class="mb-4 flex items-start justify-between gap-3">
           <div>
-            <p class="text-xs uppercase tracking-[.25em] text-amber-300">${c.country}</p>
-            <h2 class="text-2xl font-black leading-tight">${c.name}</h2>
+            <p class="text-xs uppercase tracking-[.25em] text-amber-300">
+              ${c.country || ACTIVE_DECK.title}
+            </p>
+
+            <h2 class="text-2xl font-black leading-tight">
+              ${c.name}
+            </h2>
           </div>
-          ${badge(c.rarity)}
+
+          ${
+            c.rarity
+              ? badge(c.rarity)
+              : ""
+          }
         </div>
+
+        ${
+          c.info
+            ? `
+              <div class="mb-4 rounded-2xl border border-slate-700 bg-slate-950/70 p-3">
+                <p class="text-sm leading-relaxed text-slate-300">
+                  ${c.info}
+                </p>
+              </div>
+            `
+            : ""
+        }
 
         <div class="grid gap-2">
           ${attrs().map(a => `
@@ -499,13 +583,9 @@ function home() {
           onchange="ACTIVE_DECK = DECKS[this.value]; render()"
           class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 font-bold text-white outline-none focus:border-amber-400"
         >
-          <option value="performance" ${ACTIVE_DECK.id === "performance" ? "selected" : ""}>
-            Performance Legends
-          </option>
-      
-          <option value="space" ${ACTIVE_DECK.id === "space" ? "selected" : ""}>
-            Cosmic Legends
-          </option>
+          <option value="performance" ${ACTIVE_DECK.id === "performance" ? "selected" : ""}>Performance Legends</option>
+          <option value="space" ${ACTIVE_DECK.id === "space" ? "selected" : ""}>Cosmic Legends</option>
+          <option value="space" ${ACTIVE_DECK.id === "europe" ? "selected" : ""}>Χώρες της Ευρώπης</option>
         </select>
       </div>
 
