@@ -269,6 +269,27 @@ function fmt(c, a) {
   return Number(v).toLocaleString("el-GR") + " " + a.unit;
 }
 
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  if (a.key === "gravity") {
+    return Number(v).toLocaleString("el-GR") + " " + a.unit;
+  }
+  return a;
+
+  if (a.key === "temperature") {
+    return Number(v).toLocaleString("el-GR") + " " + a.unit;
+  }
+
+  if (a.unit === "") {
+    return Number(v).toLocaleString("el-GR");
+  }
+
+  return Number(v).toLocaleString("el-GR") + " " + a.unit;
+}
+
 function formatTime(seconds) {
   if (seconds === null) return "";
 
