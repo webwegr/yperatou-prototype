@@ -97,7 +97,7 @@ const EUROPE = [
   { name:"Μάλτα", population:0.5, area:316, lifeExpectancy:83.0, distanceFromGreece:870, info:"Πρωτεύουσα: Βαλέτα. Landmark: Καθεδρικός Αγίου Ιωάννη. Η Μάλτα έχει στρατηγική θέση στη Μεσόγειο και πλούσια ιπποτική ιστορία.", image:"assets/europe/malta.jpg" }
 ];
 
-const DECKS = {
+export const DECKS = {
   performance: {
     id: "performance",
     title: "Performance Legends",
