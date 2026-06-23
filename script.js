@@ -389,7 +389,7 @@ function home() {
         </label>
       
         <select
-          onchange="ACTIVE_DECK = DECKS[this.value]; render()"
+          onchange="selectDeck(this.value)"
           class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 font-bold text-white outline-none focus:border-amber-400"
         >
           <option value="performance" ${ACTIVE_DECK.id === "performance" ? "selected" : ""}>Performance Legends</option>
@@ -800,5 +800,22 @@ function render() {
   if (S.screen === "handoff") handoff();
   if (S.screen === "over") over();
 }
+
+function selectDeck(deckId) {
+  ACTIVE_DECK = DECKS[deckId];
+  render();
+}
+
+window.S = S;
+window.DECKS = DECKS;
+
+window.render = render;
+window.start = start;
+window.startMatch = startMatch;
+window.pick = pick;
+window.cont = cont;
+window.botPickRandomAttribute = botPickRandomAttribute;
+window.stopTimer = stopTimer;
+window.selectDeck = selectDeck;
 
 render();
