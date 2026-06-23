@@ -1,5 +1,5 @@
-const APP_VERSION = "0.7a3-fix1";
-const APP_CHANGELOG = [
+export const APP_VERSION = "0.7a3-fix1";
+export const APP_CHANGELOG = [
 {
   version: "0.7a3",
   changes: [
