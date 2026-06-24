@@ -606,6 +606,7 @@ function resolveRound(k, selectedBy) {
 
 function cont() {
   const r = S.round;
+  const previousTurn = S.currentTurn;
 
   const pc = S.p.shift();
   const bc = S.b.shift();
@@ -615,24 +616,23 @@ function cont() {
   if (r.w === "tie") {
     S.pending.push(pc, bc);
     S.log.unshift("Ισοπαλία");
-
     nextTurn = r.selectedBy;
 
   } else if (r.w === "p") {
     S.p.push(pc, bc, ...S.pending);
     S.pending = [];
-
     nextTurn = "player1";
 
   } else {
     S.b.push(bc, pc, ...S.pending);
     S.pending = [];
-
     nextTurn = S.mode === "bot" ? "bot" : "player2";
   }
 
   S.round = null;
   S.currentTurn = nextTurn;
+
+  const turnChanged = previousTurn !== nextTurn;
 
   if (S.p.length === 0 || S.b.length === 0) {
     stopTimer();
@@ -640,9 +640,7 @@ function cont() {
   } else if (S.matchType === "time" && S.timeExpired) {
     stopTimer();
     S.screen = "over";
-  } else if (S.mode === "human" && nextTurn === "player2") {
-    S.screen = "handoff";
-  } else if (S.mode === "human" && nextTurn === "player1" && r.selectedBy === "player2") {
+  } else if (S.mode === "human" && turnChanged) {
     S.screen = "handoff";
   } else {
     S.screen = "game";
